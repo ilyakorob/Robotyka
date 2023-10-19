@@ -1,20 +1,42 @@
 package com.ilyakorob.robotyka.models;
 
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
+@Entity
+@Table(name = "Student")
 public class Student {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @NotEmpty(message = "Pole nie może być puste ")
+    @Size(min = 2, max = 100, message = "Imie musi mieć od 2 do 100 znaków")
+    @Column(name = "name")
     private String name;
+    @NotEmpty(message = "Pole nie może być puste ")
+    @Size(min = 2, max = 100, message = "Nazwisko musi mieć od 2 do 100 znaków")
+    @Column(name = "surname")
     private String surname;
-    private School school;
+
+    @NotEmpty(message = "Pole nie może być puste ")
+    @Size(min = 2, max = 100, message = "Nazwa grupy musi mieć od 2 do 100 znaków")
+    @Column(name = "group")
     private String group;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id",referencedColumnName = "id")
+    private Teacher teacher;
 
     public Student(){
 
     }
 
-    public Student(String name, String surname, School school, String group) {
+    public Student(String name, String surname,  String group) {
         this.name = name;
         this.surname = surname;
-        this.school = school;
         this.group = group;
     }
 
@@ -34,14 +56,6 @@ public class Student {
         this.surname = surname;
     }
 
-    public School getSchool() {
-        return school;
-    }
-
-    public void setSchool(School school) {
-        this.school = school;
-    }
-
     public String getGroup() {
         return group;
     }
@@ -55,7 +69,6 @@ public class Student {
         return "Student{" +
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", school=" + school +
                 ", group='" + group + '\'' +
                 '}';
     }
